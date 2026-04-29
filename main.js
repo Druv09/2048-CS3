@@ -1,2 +1,5 @@
-let matrix = []
-matrix.push("1", "2")
+const readline = require('readline')
+const matrix = [];
+matrix.push([], [], [], [])
+
+const g = std.readline();
