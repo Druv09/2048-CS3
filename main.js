@@ -7,7 +7,7 @@ let rl = readline.createInterface({
 const matrix = [];
 const dict = [];
 let finalNumber = 0;
-let gameEnd = false;
+let gameEnd = true;
 let roundEnd = false;
 let difficulty = "";
 
@@ -21,18 +21,21 @@ if(difficulty = "easy")
 {
     matrix.push([], [], [], [], [], [], [], []);
     dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
+    gameEnd = false;
 }
 
 if(difficulty = "med")
 {
     matrix.push([], [], [], []);
     dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
+    gameEnd = false;
 }
 
 if(difficulty = "hard")
 {
     matrix.push([], [], [], []);
     dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+    gameEnd = false;
 }
 
 while(!gameEnd)
@@ -56,13 +59,13 @@ while(!gameEnd)
 function winCondition()
 {
     for(let i = 0; i < matrix.length; i++)
+    {
+        for(let x = 0; x < matrix.length; x++)
         {
-            for(let x = 0; x < matrix.length; x++)
+            if(matrix[i][x] == finalNumber)
             {
-                if(matrix[i][x] == finalNumber)
-                {
-                    roundEnd = true;
-                }
+                roundEnd = true;
             }
         }
+    }
 }
