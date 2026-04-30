@@ -1,5 +1,5 @@
 import readline from 'node:readline';
-const rl = readline.createInterface({
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
@@ -14,6 +14,7 @@ let difficulty = "";
 
 rl.question("What difficulty? hard/med/easy ", type => {
     difficulty = type;
+    rl.close();
 });
 
 if(difficulty = "easy")
@@ -47,6 +48,7 @@ while(!gameEnd)
         {
             gameEnd = true;
         }
+        rl.close();
     });
 }
 
