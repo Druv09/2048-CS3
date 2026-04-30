@@ -12,6 +12,8 @@ let roundEnd = false;
 let difficulty = "";
 
 
+console.log("Welcome to 1024 by Hemish Duri and Druvan Bharath")
+
 rl.question("What difficulty? hard/med/easy ", type => {
     difficulty = type;
     rl.close();
