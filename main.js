@@ -7,10 +7,12 @@ const rl = readline.createInterface({
 const matrix = [];
 const dict = [];
 let finalNumber = 0;
-let gameEnd;
+let gameEnd = false;
+let roundEnd = false;
+let difficulty = "";
 
 
-rl.question(`What difficulty? hard/med/easy`, type => {
+rl.question("What difficulty? hard/med/easy ", type => {
     difficulty = type;
 });
 
@@ -32,7 +34,33 @@ if(difficulty = "hard")
     dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
 }
 
-while()
+while(!gameEnd)
 {
-    
+    while(!roundEnd)
+    {
+
+        winCondition();
+    }
+
+    rl.question("Would you like to play again, y/n", a => {
+        if(a == "n")
+        {
+            gameEnd = true;
+        }
+    });
+}
+
+
+function winCondition()
+{
+    for(let i = 0; i < matrix.length; i++)
+        {
+            for(let x = 0; x < matrix.length; x++)
+            {
+                if(matrix[i][x] == finalNumber)
+                {
+                    roundEnd = true;
+                }
+            }
+        }
 }
