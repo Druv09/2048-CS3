@@ -13,38 +13,40 @@ let difficulty = "";
 
 
 console.log("Welcome to 1024 by Hemish Duri and Druvan Bharath")
-
-rl.question("What difficulty? hard/med/easy ", type => {
-    difficulty = type;
-    rl.close();
-});
-
-if(difficulty = "easy")
+async function game()
 {
-    matrix.push([], [], [], [], [], [], [], []);
-    dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
-    gameEnd = false;
-}
+    rl.question("What difficulty? hard/med/easy ", type => {
+        difficulty = type;
+        rl.close();
+    });
 
-if(difficulty = "med")
-{
-    matrix.push([], [], [], []);
-    dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
-    gameEnd = false;
-}
+    if(difficulty = "easy")
+    {
+        matrix.push([], [], [], [], [], [], [], []);
+        dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
+        gameEnd = false;
+    }
 
-if(difficulty = "hard")
-{
-    matrix.push([], [], [], []);
-    dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
-    gameEnd = false;
+    if(difficulty = "med")
+    {
+        matrix.push([], [], [], []);
+        dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
+        gameEnd = false;
+    }
+
+    if(difficulty = "hard")
+    {
+        matrix.push([], [], [], []);
+        dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+        gameEnd = false;
+    }
 }
 
 while(!gameEnd)
 {
     while(!roundEnd)
     {
-
+        
         winCondition();
     }
 
@@ -74,5 +76,8 @@ function winCondition()
 
 function run()
 {
-        
+
 }
+
+
+game();
