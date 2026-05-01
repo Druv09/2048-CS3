@@ -61,35 +61,36 @@ while(!gameEnd)
 
 function builder(direction)
 {
-    const builder = [];
+    const b = [];
     if(direction == "w" || direction == "W")
     {
         for(let y = 0; y < matrix.length; y++)
         {
-            builder.push(matrix[y][x]);
+            b.push(matrix[y][x]);
         }
     }
     if(direction == "a" || direction == "A")
     {
         for(let y = 0; y < matrix.length; y++)
         {
-            builder.push(matrix[x][y]);
+            b.push(matrix[x][y]);
         }
     }
     if(direction == "s" || direction == "S")
     {
         for(let y = 0; y < matrix.length; y++)
         {
-            builder.push(matrix[y][x]);
+            b.push(matrix[y][x]);
         }
     }
     if(direction == "d" || direction == "D")
     {
         for(let y = matrix.length - 1; y >= 0; y--)
         {
-            builder.push(matrix[x][y]);
+            b.push(matrix[x][y]);
         }
     }
+    return b;
 }
 
 function winCondition()
@@ -108,9 +109,13 @@ function winCondition()
 
 function run()
 {
-    rl.question("Enter a key, W/A/S/D", a => {
-        builder(a);
-    });
+    newMatrix = [];
+    for(let i = 0; i < matrix.length; i++)
+    {
+        rl.question("Enter a key, W/A/S/D", a => {
+            newMatrix.push(builder(a));
+        });
+    }
 }
 
 
