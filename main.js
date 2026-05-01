@@ -4,7 +4,7 @@ let rl = readline.createInterface({
   output: process.stdout,
 });
 
-const matrix = [];
+let matrix = [];
 const dict = [];
 let finalNumber = 0;
 let gameEnd = true;
@@ -40,13 +40,13 @@ async function game()
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
         gameEnd = false;
     }
+
 }
 
 while(!gameEnd)
 {
     while(!roundEnd)
     {
-        
         winCondition();
     }
 
@@ -59,6 +59,38 @@ while(!gameEnd)
     });
 }
 
+function builder(direction)
+{
+    const builder = [];
+    if(direction == "w" || direction == "W")
+    {
+        for(let y = 0; y < matrix.length; y++)
+        {
+            builder.push(matrix[y][x]);
+        }
+    }
+    if(direction == "a" || direction == "A")
+    {
+        for(let y = 0; y < matrix.length; y++)
+        {
+            builder.push(matrix[x][y]);
+        }
+    }
+    if(direction == "s" || direction == "S")
+    {
+        for(let y = 0; y < matrix.length; y++)
+        {
+            builder.push(matrix[y][x]);
+        }
+    }
+    if(direction == "d" || direction == "D")
+    {
+        for(let y = matrix.length - 1; y >= 0; y--)
+        {
+            builder.push(matrix[x][y]);
+        }
+    }
+}
 
 function winCondition()
 {
@@ -76,7 +108,9 @@ function winCondition()
 
 function run()
 {
-
+    rl.question("Enter a key, W/A/S/D", a => {
+        builder(a);
+    });
 }
 
 
