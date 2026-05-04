@@ -11,7 +11,7 @@ let roundEnd = false;
 let difficulty = "";
 
 
-console.log("Welcome to 1024 by Hemish Duri and Druvan Bharath")
+console.log("Welcome to 2048 by Druvan Bharath and Hemish Duri")
 async function game()
 {
     rl.question("What difficulty? hard/med/easy ", type => {
@@ -42,6 +42,7 @@ async function game()
     else 
     {
         console.log("Invalid input. Please type easy, med, or hard.");
+        game();
     }
 }
 
@@ -60,7 +61,8 @@ function checkLoss()
 
     for (let r = 0; r < size; r++) 
     {
-        for (let c = 0; c < size - 1; c++) {
+        for (let c = 0; c < size - 1; c++)
+        {
             if (matrix[r][c] === matrix[r][c + 1]) 
             {
                 return false;
@@ -79,42 +81,34 @@ function checkLoss()
         }
     }
 
-    return true; // Board is full and no merges left
+    return true;
 }
 
-while(!gameEnd)
+function processMove(a) 
 {
-    while(!roundEnd)
-    {
-        winCondition();
-    }
-
-    rl.question("Would you like to play again, y/n", a => {
-        if(a == "n")
-        {
-            gameEnd = true;
-        }
-        rl.close();
-    });
-}
-
-function processMove(dir) {
     let moved = false;
-    if (dir === 'a') {
+    if (a === 'a') 
+    {
         moved = move();
-    } else if (dir === 'w') {
+    } 
+    else if (a === 'w') 
+    {
         rotateMatrix();
         rotateMatrix(); 
         rotateMatrix(); 
         moved = move();
         rotateMatrix();
-    } else if (dir === 'd') {
+    } 
+    else if (a === 'd') 
+    {
         rotateMatrix(); 
         rotateMatrix();
         moved = move();
         rotateMatrix(); 
         rotateMatrix();
-    } else if (dir === 's') {
+    } 
+    else if (a === 's') 
+    {
         rotateMatrix();
         moved = move();
         rotateMatrix(); 
@@ -124,7 +118,6 @@ function processMove(dir) {
     return moved;
 }
 
-// Rotates the matrix 90 degrees clockwise
 function rotateMatrix() {
     let newMat = Array.from({ length: size }, () => Array(size).fill(0));
     for (let r = 0; r < size; r++) {
@@ -146,17 +139,6 @@ function winCondition()
                 roundEnd = true;
             }
         }
-    }
-}
-
-function run()
-{
-    newMatrix = [];
-    for(let i = 0; i < matrix.length; i++)
-    {
-        rl.question("Enter a key, W/A/S/D", a => {
-            newMatrix.push(builder(a));
-        });
     }
 }
 
