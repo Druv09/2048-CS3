@@ -1,8 +1,7 @@
-import readline from 'node:readline';
-let rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+import * as readline from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
+
+const rl = readline.createInterface({ input, output });
 
 let matrix = [];
 const dict = [];
@@ -40,7 +39,47 @@ async function game()
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
         gameEnd = false;
     }
+    else 
+    {
+        console.log("Invalid input. Please type easy, med, or hard.");
+    }
+}
 
+function checkLoss() 
+{
+    for (let r = 0; r < matrix.length; r++) 
+    {
+        for (let c = 0; c < matrix.length; c++) 
+        {
+            if (matrix[r][c] === 0) 
+            {
+                return false;
+            }
+        }
+    }
+
+    for (let r = 0; r < size; r++) 
+    {
+        for (let c = 0; c < size - 1; c++) {
+            if (matrix[r][c] === matrix[r][c + 1]) 
+            {
+                return false;
+            }
+        }
+    }
+    
+    for (let c = 0; c < size; c++) 
+    {
+        for (let r = 0; r < size - 1; r++) 
+        {
+            if (matrix[r][c] === matrix[r + 1][c]) 
+            {
+                return false;
+            }
+        }
+    }
+
+    return true; // Board is full and no merges left
 }
 
 while(!gameEnd)
@@ -59,38 +98,41 @@ while(!gameEnd)
     });
 }
 
-function builder(direction)
-{
-    const b = [];
-    if(direction == "w" || direction == "W")
-    {
-        for(let y = 0; y < matrix.length; y++)
-        {
-            b.push(matrix[y][x]);
+function processMove(dir) {
+    let moved = false;
+    if (dir === 'a') {
+        moved = move();
+    } else if (dir === 'w') {
+        rotateMatrix();
+        rotateMatrix(); 
+        rotateMatrix(); 
+        moved = move();
+        rotateMatrix();
+    } else if (dir === 'd') {
+        rotateMatrix(); 
+        rotateMatrix();
+        moved = move();
+        rotateMatrix(); 
+        rotateMatrix();
+    } else if (dir === 's') {
+        rotateMatrix();
+        moved = move();
+        rotateMatrix(); 
+        rotateMatrix(); 
+        rotateMatrix();
+    }
+    return moved;
+}
+
+// Rotates the matrix 90 degrees clockwise
+function rotateMatrix() {
+    let newMat = Array.from({ length: size }, () => Array(size).fill(0));
+    for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+            newMat[c][size - 1 - r] = matrix[r][c];
         }
     }
-    if(direction == "a" || direction == "A")
-    {
-        for(let y = 0; y < matrix.length; y++)
-        {
-            b.push(matrix[x][y]);
-        }
-    }
-    if(direction == "s" || direction == "S")
-    {
-        for(let y = 0; y < matrix.length; y++)
-        {
-            b.push(matrix[y][x]);
-        }
-    }
-    if(direction == "d" || direction == "D")
-    {
-        for(let y = matrix.length - 1; y >= 0; y--)
-        {
-            b.push(matrix[x][y]);
-        }
-    }
-    return b;
+    matrix = newMat;
 }
 
 function winCondition()
@@ -118,5 +160,26 @@ function run()
     }
 }
 
+function spawnNumber() 
+{
+    let emptySpots = [];
+    for (let r = 0; r < size; r++) 
+        {
+        for (let c = 0; c < size; c++) 
+            {
+            if (matrix[r][c] === 0) 
+                {
+                emptySpots.push({ r, c });
+            }
+        }
+    }
+
+    if (emptySpots.length > 0) 
+    {
+        const spot = emptySpots[Math.floor(Math.random() * emptySpots.length)];
+        const value = dict[Math.floor(Math.random() * dict.length)];
+        matrix[spot.r][spot.c] = value;
+    }
+}
 
 game();
