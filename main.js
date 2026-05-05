@@ -177,5 +177,21 @@ function spawnNumber()
         matrix[spot.r][spot.c] = value;
     }
 }
+function printArray()
+{
+    const line='-----------------------------';
+    console.log(line);
+    for(let r=0; r < matrix.length; r++)
+    {
+        let row = '|';
+        for(let c=0; c < matrix.length; c++)
+        {
+            row += matrix[r][c].toString().padStart(5, ' ') + ' |';
+        }
+        console.log(row);
+        console.log(line);
+    }
+    
+}
 
 game();
