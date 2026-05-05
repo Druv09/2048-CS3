@@ -44,6 +44,7 @@ async function game()
         console.log("Invalid input. Please type easy, med, or hard.");
         game();
     }
+    play();
 }
 
 function checkLoss() 
@@ -82,6 +83,19 @@ function checkLoss()
     }
 
     return true;
+}
+
+function play()
+{
+    while(!checkLoss() || !winCondition())
+    {
+        spawnNumber();
+        rl.question("Enter a move ", a => {
+            processMove(a);
+            rl.close();
+        });
+        printArr();
+    }
 }
 
 function processMove(a) 
@@ -134,7 +148,7 @@ function winCondition()
     {
         for(let x = 0; x < matrix.length; x++)
         {
-            if(matrix[i][x] == finalNumber)
+            if(matrix[i][x] === finalNumber)
             {
                 roundEnd = true;
             }
@@ -146,12 +160,12 @@ function spawnNumber()
 {
     let emptySpots = [];
     for (let r = 0; r < size; r++) 
-        {
+    {
         for (let c = 0; c < size; c++) 
-            {
+        {
             if (matrix[r][c] === 0) 
-                {
-                emptySpots.push({ r, c });
+            {
+                emptySpots.push({r, c});
             }
         }
     }
