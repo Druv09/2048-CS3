@@ -96,6 +96,12 @@ function play()
         });
         printArr();
     }
+    rl.question("Would you like to play again? y if yes, anything else for no ", a => {
+        if(a === 'y')
+        {
+            play();
+        }
+    })
 }
 
 function processMove(a) 
@@ -133,9 +139,11 @@ function processMove(a)
 }
 
 function rotateMatrix() {
-    let newMat = Array.from({ length: size }, () => Array(size).fill(0));
-    for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
+    let newMat = Array.from({length:size}, () => Array(size).fill(0));
+    for (let r = 0; r < size; r++) 
+    {
+        for (let c = 0; c < size; c++) 
+        {
             newMat[c][size - 1 - r] = matrix[r][c];
         }
     }
