@@ -9,6 +9,7 @@ let finalNumber = 0;
 let gameEnd = true;
 let roundEnd = false;
 let difficulty = "";
+let size = 0;
 
 
 console.log("Welcome to 2048 by Druvan Bharath and Hemish Duri")
@@ -21,15 +22,17 @@ async function game()
 
     if(difficulty = "easy")
     {
-        matrix.push([], [], [], [], [], [], [], []);
+        matrix.push([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []);
         dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
+        size = 16;
         gameEnd = false;
     }
 
     if(difficulty = "med")
     {
-        matrix.push([], [], [], []);
+        matrix.push([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []);
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
+        size = 16;
         gameEnd = false;
     }
 
@@ -37,6 +40,7 @@ async function game()
     {
         matrix.push([], [], [], []);
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+        size = 4;
         gameEnd = false;
     }
     else 
@@ -94,7 +98,7 @@ function play()
             processMove(a);
             rl.close();
         });
-        printArr();
+        printArray();
     }
     rl.question("Would you like to play again? y if yes, anything else for no ", a => {
         if(a === 'y')
@@ -138,7 +142,8 @@ function processMove(a)
     return moved;
 }
 
-function rotateMatrix() {
+function rotateMatrix() 
+{
     let newMat = Array.from({length:size}, () => Array(size).fill(0));
     for (let r = 0; r < size; r++) 
     {
