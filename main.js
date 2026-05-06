@@ -22,7 +22,7 @@ async function game()
 
     if(difficulty === "easy")
     {
-        size = 8;
+        size = 6;
         dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
     }
     else if(difficulty === "med")
@@ -33,6 +33,11 @@ async function game()
     else if(difficulty === "hard")
     {
         size = 3;
+        dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+    }
+    else if(difficulty === "test")
+    {
+        size = 2;
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
     }
     else
