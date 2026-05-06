@@ -4,82 +4,82 @@ import { stdin as input, stdout as output } from 'node:process';
 const rl = readline.createInterface({ input, output });
 
 let matrix = [];
-const dict = [];
-let finalNumber = 0;
+let dict = [];
+let finalNumber = 2048;
 let gameEnd = true;
 let roundEnd = false;
 let difficulty = "";
 let size = 0;
 
-
 console.log("Welcome to 2048 by Druvan Bharath and Hemish Duri")
+
 async function game()
 {
-    rl.question("What difficulty? hard/med/easy ", type => {
-        difficulty = type;
-        rl.close();
-    });
+    difficulty = await rl.question("What difficulty? hard/med/easy ");
 
-    if(difficulty = "easy")
+    matrix = [];
+    dict = [];
+
+    if(difficulty === "easy")
     {
-        matrix.push([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []);
+        size = 8;
         dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
-        size = 16;
-        gameEnd = false;
     }
-
-    if(difficulty = "med")
+    else if(difficulty === "med")
     {
-        matrix.push([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []);
-        dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
-        size = 16;
-        gameEnd = false;
-    }
-
-    if(difficulty = "hard")
-    {
-        matrix.push([], [], [], []);
-        dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
         size = 4;
-        gameEnd = false;
+        dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
     }
-    else 
+    else if(difficulty === "hard")
+    {
+        size = 3;
+        dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+    }
+    else
     {
         console.log("Invalid input. Please type easy, med, or hard.");
-        game();
+        return game();
     }
+
+    for(let r = 0; r < size; r++)
+    {
+        matrix.push(new Array(size).fill(0));
+    }
+    
+    spawnNumber();
+    spawnNumber();
     play();
 }
 
-function checkLoss() 
+function checkLoss()
 {
-    for (let r = 0; r < matrix.length; r++) 
+    for(let r = 0; r < size; r++)
     {
-        for (let c = 0; c < matrix.length; c++) 
+        for(let c = 0; c < size; c++)
         {
-            if (matrix[r][c] === 0) 
+            if(matrix[r][c] === 0)
             {
                 return false;
             }
         }
     }
 
-    for (let r = 0; r < size; r++) 
+    for(let r = 0; r < size; r++)
     {
-        for (let c = 0; c < size - 1; c++)
+        for(let c = 0; c < size - 1; c++)
         {
-            if (matrix[r][c] === matrix[r][c + 1]) 
+            if(matrix[r][c] === matrix[r][c + 1])
             {
                 return false;
             }
         }
     }
     
-    for (let c = 0; c < size; c++) 
+    for(let c = 0; c < size; c++)
     {
-        for (let r = 0; r < size - 1; r++) 
+        for(let r = 0; r < size - 1; r++)
         {
-            if (matrix[r][c] === matrix[r + 1][c]) 
+            if(matrix[r][c] === matrix[r + 1][c])
             {
                 return false;
             }
@@ -89,49 +89,81 @@ function checkLoss()
     return true;
 }
 
-function play()
+async function play()
 {
-    while(!checkLoss() || !winCondition())
+    while(true)
     {
-        spawnNumber();
-        rl.question("Enter a move ", a => {
-            processMove(a);
-            rl.close();
-        });
         printArray();
-    }
-    rl.question("Would you like to play again? y if yes, anything else for no ", a => {
-        if(a === 'y')
+
+        if(winCondition())
         {
-            play();
+            console.log("You won!");
+            break;
         }
-    })
+        if(checkLoss())
+        {
+            console.log("Game Over! No more moves available.");
+            break;
+        }
+
+        const moveInput = await rl.question("do w, a, s, d: ");
+        if(processMove(moveInput))
+        {
+            if(difficulty === "hard")
+            {
+                spawnNumber();
+            }
+            if(difficulty === "med")
+            {
+                spawnNumber();
+                spawnNumber();
+            }
+            if(difficulty === "easy")
+            {
+                spawnNumber();
+                spawnNumber();
+                spawnNumber();
+                spawnNumber();
+            }
+        }
+    }
+
+    const d = await rl.question("Would you like to play again? y for yes, anything else for no ");
+    if(d.toLowerCase() === 'y')
+    {
+        game();
+    }
+    else
+    {
+        console.log("Thanks for playing!");
+        rl.close();
+    }
 }
 
-function processMove(a) 
+function processMove(a)
 {
     let moved = false;
-    if (a === 'a') 
+    if(a === 'a')
     {
         moved = move();
-    } 
-    else if (a === 'w') 
+    }
+    else if(a === 'w')
     {
         rotateMatrix();
         rotateMatrix(); 
         rotateMatrix(); 
         moved = move();
         rotateMatrix();
-    } 
-    else if (a === 'd') 
+    }
+    else if(a === 'd')
     {
         rotateMatrix(); 
         rotateMatrix();
         moved = move();
         rotateMatrix(); 
         rotateMatrix();
-    } 
-    else if (a === 's') 
+    }
+    else if(a === 's')
     {
         rotateMatrix();
         moved = move();
@@ -142,12 +174,57 @@ function processMove(a)
     return moved;
 }
 
-function rotateMatrix() 
+function move()
+{
+    let moved = false;
+    for(let r = 0; r < size; r++)
+    {
+        let row = [];
+        for(let i = 0; i < matrix[r].length; i++)
+        {
+            if(!(matrix[r][i] === 0))
+            {
+                row.push(matrix[r][i])
+            }
+        }
+        let newRow = [];
+        for(let i = 0; i < row.length; i++)
+        {
+            if(row[i] === row[i + 1])
+            {
+                newRow.push(row[i] * 2);
+                i++; 
+                moved = true;
+            }
+            else
+            {
+                newRow.push(row[i]);
+            }
+        }
+        
+        while(newRow.length < size)
+        {
+            newRow.push(0);
+        }
+        
+        for(let c = 0; c < size; c++)
+        {
+            if(matrix[r][c] !== newRow[c])
+            {
+                moved = true;
+            }
+            matrix[r][c] = newRow[c];
+        }
+    }
+    return moved;
+}
+
+function rotateMatrix()
 {
     let newMat = Array.from({length:size}, () => Array(size).fill(0));
-    for (let r = 0; r < size; r++) 
+    for(let r = 0; r < size; r++)
     {
-        for (let c = 0; c < size; c++) 
+        for(let c = 0; c < size; c++)
         {
             newMat[c][size - 1 - r] = matrix[r][c];
         }
@@ -157,54 +234,64 @@ function rotateMatrix()
 
 function winCondition()
 {
-    for(let i = 0; i < matrix.length; i++)
+    for(let i = 0; i < size; i++)
     {
-        for(let x = 0; x < matrix.length; x++)
+        for(let x = 0; x < size; x++)
         {
-            if(matrix[i][x] === finalNumber)
+            if(matrix[i][x] >= finalNumber)
             {
-                roundEnd = true;
+                return true;
             }
         }
     }
+    return false;
 }
 
-function spawnNumber() 
+function spawnNumber()
 {
     let emptySpots = [];
-    for (let r = 0; r < size; r++) 
+    for(let r = 0; r < size; r++)
     {
-        for (let c = 0; c < size; c++) 
+        for(let c = 0; c < size; c++)
         {
-            if (matrix[r][c] === 0) 
+            if(matrix[r][c] === 0)
             {
                 emptySpots.push({r, c});
             }
         }
     }
 
-    if (emptySpots.length > 0) 
+    if(emptySpots.length > 0)
     {
         const spot = emptySpots[Math.floor(Math.random() * emptySpots.length)];
         const value = dict[Math.floor(Math.random() * dict.length)];
         matrix[spot.r][spot.c] = value;
     }
 }
+
 function printArray()
 {
-    const line='-----------------------------';
+    const line = '-'.repeat(size * 8);
     console.log(line);
-    for(let r=0; r < matrix.length; r++)
+    for(let r = 0; r < size; r++)
     {
         let row = '|';
-        for(let c=0; c < matrix.length; c++)
+        for(let c=0; c < size; c++)
         {
-            row += matrix[r][c].toString().padStart(5, ' ') + ' |';
+            let val = 0;
+            if(matrix[r][c] === 0)
+            {
+                val = " ";
+            }
+            else
+            {
+                val = matrix[r][c];
+            }
+            row += val.toString().padStart(5, ' ') + ' |';
         }
         console.log(row);
         console.log(line);
     }
-    
 }
 
 game();
