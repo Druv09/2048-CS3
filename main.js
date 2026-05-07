@@ -15,22 +15,20 @@ console.log("Welcome to 2048 by Druvan Bharath and Hemish Duri")
 
 async function game()
 {
-    difficulty = await rl.question("What difficulty? hard/med/easy or type test for testing and help to see what difficulty does what! ");
+    difficulty = await rl.question("What difficulty? hard/med/easy ");
 
     matrix = [];
     dict = [];
 
     if(difficulty === "easy")
     {
-        size = 6;
+        size = 8;
         dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
-        finalNumber = 512
     }
     else if(difficulty === "med")
     {
         size = 4;
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
-        finalNumber = 1024;
     }
     else if(difficulty === "hard")
     {
@@ -258,7 +256,7 @@ function winCondition()
     {
         for(let x = 0; x < size; x++)
         {
-            if(matrix[i][x] >= finalNumber)
+            if(matrix[i][x] >= x)
             {
                 return true;
             }
