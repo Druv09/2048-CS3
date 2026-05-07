@@ -126,17 +126,14 @@ async function play()
             if(difficulty === "hard")
             {
                 spawnNumber();
+                spawnNumber();
             }
             if(difficulty === "med")
             {
                 spawnNumber();
-                spawnNumber();
             }
             if(difficulty === "easy")
             {
-                spawnNumber();
-                spawnNumber();
-                spawnNumber();
                 spawnNumber();
             }
             if(difficulty === "test")
@@ -256,7 +253,7 @@ function winCondition()
     {
         for(let x = 0; x < size; x++)
         {
-            if(matrix[i][x] >= x)
+            if(matrix[i][x] >= finalNumber)
             {
                 return true;
             }
