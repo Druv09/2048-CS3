@@ -43,6 +43,14 @@ async function game()
         finalNumber = 16;
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
     }
+    else if(difficulty === "help")
+    {
+        console.log("Easy: 6x6 board, 2s and 4s spawn, final number is 512");
+        console.log("Med: 4x4 board, 2s and 4s spawn but 2s are more much likely, final number is 512");
+        console.log("Hard: 3x3 board, 2s only, final number is 2048");
+        console.log("Test: testing purposes only");
+        game();
+    }
     else
     {
         console.log("Invalid input. Please type easy, med, or hard.");
@@ -131,6 +139,10 @@ async function play()
                 spawnNumber();
                 spawnNumber();
                 spawnNumber();
+                spawnNumber();
+            }
+            if(difficulty === "test")
+            {
                 spawnNumber();
             }
         }
