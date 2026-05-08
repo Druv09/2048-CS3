@@ -1,11 +1,11 @@
-import * as readline from 'node:readline/promises';
+import * as readline from 'node:readline/promises'; //importing this to make input handling easier
 import { stdin as input, stdout as output } from 'node:process';
 
 const rl = readline.createInterface({ input, output });
 
-let matrix = [];
-let dict = [];
-let finalNumber = 2048;
+let matrix = []; //we're going to be storing our game in this
+let dict = []; //this is where we store our probability for each number to to spawn
+let finalNumber = 2048; //set this for now but change it for each difficulty
 let gameEnd = true;
 let roundEnd = false;
 let difficulty = "";
@@ -13,21 +13,24 @@ let size = 0;
 
 console.log("Welcome to 2048 by Druvan Bharath and Hemish Duri")
 
+//here we set up the game, control the difficulty and stuff
 async function game()
 {
-    difficulty = await rl.question("What difficulty? hard/med/easy ");
+    difficulty = await rl.question("What difficulty? hard/med/easy "); //we have to use await and async for input
 
     matrix = [];
     dict = [];
 
     if(difficulty === "easy")
     {
-        size = 8;
+        size = 5;
+        finalNumber = 512;
         dict.push(2, 2, 2, 2, 4, 4, 4, 4, 4, 4);
     }
     else if(difficulty === "med")
     {
         size = 4;
+        finalNumber = 1024;
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 4);
     }
     else if(difficulty === "hard")
@@ -38,13 +41,13 @@ async function game()
     else if(difficulty === "test")
     {
         size = 3;
-        finalNumber = 16;
+        finalNumber = 32;
         dict.push(2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
     }
     else if(difficulty === "help")
     {
         console.log("Easy: 6x6 board, 2s and 4s spawn, final number is 512");
-        console.log("Med: 4x4 board, 2s and 4s spawn but 2s are more much likely, final number is 512");
+        console.log("Med: 4x4 board, 2s and 4s spawn but 2s are more much likely, final number is 1024");
         console.log("Hard: 3x3 board, 2s only, final number is 2048");
         console.log("Test: testing purposes only");
         game();
@@ -55,18 +58,21 @@ async function game()
         return game();
     }
 
+    //fill in the game board with arrays filled with zeroes
     for(let r = 0; r < size; r++)
     {
         matrix.push(new Array(size).fill(0));
     }
     
+    spawnNumber(); //start off with two numbers
     spawnNumber();
-    spawnNumber();
-    play();
+    play(); 
 }
 
+//to check if the player lost
 function checkLoss()
 {
+    //if there are any empty spots
     for(let r = 0; r < size; r++)
     {
         for(let c = 0; c < size; c++)
@@ -78,6 +84,8 @@ function checkLoss()
         }
     }
 
+    //we also need to check if the player has any moves left
+    //check if two numbers next to each other on a row equals each toher
     for(let r = 0; r < size; r++)
     {
         for(let c = 0; c < size - 1; c++)
@@ -88,7 +96,7 @@ function checkLoss()
             }
         }
     }
-    
+    //check if two numbers on a column next to each other equals each other
     for(let c = 0; c < size; c++)
     {
         for(let r = 0; r < size - 1; r++)
@@ -100,11 +108,16 @@ function checkLoss()
         }
     }
 
+    //if none of those conditions pass, it's gna be true and the game ends
     return true;
 }
 
+
+//this is where the player will be in most of the time
 async function play()
 {
+    //loops through each time, prints out the array
+    //if the player won or lost, we have to end the loop
     while(true)
     {
         printArray();
@@ -119,6 +132,8 @@ async function play()
             console.log("Game Over! No more moves available.");
             break;
         }
+
+        //
 
         const moveInput = await rl.question("do w, a, s, d: ");
         if(processMove(moveInput))
