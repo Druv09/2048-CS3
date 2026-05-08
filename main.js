@@ -133,8 +133,8 @@ async function play()
             break;
         }
 
-        //
-
+        //grab the move that the user makes
+        //we do that move and then spawn however many times per difficulty
         const moveInput = await rl.question("do w, a, s, d: ");
         if(processMove(moveInput))
         {
@@ -158,6 +158,7 @@ async function play()
         }
     }
 
+    //loops again if the user wants to play again
     const d = await rl.question("Would you like to play again? y for yes, anything else for no ");
     if(d.toLowerCase() === 'y')
     {
@@ -170,43 +171,56 @@ async function play()
     }
 }
 
+
+//most important function, this figures out the move to make depending on userinput
+//we have left, or a be the normal preprocessed move
+//for each up down right, we have to rotate the matrix instead
+//this lets work it out without making a new function for each move
 function processMove(a)
 {
-    let moved = false;
+    //moved lets us know if the user made a wasd move or messed up
+    let moved = true;
     if(a === 'a')
     {
-        moved = move();
+        move();
     }
     else if(a === 'w')
     {
         rotateMatrix();
         rotateMatrix(); 
         rotateMatrix(); 
-        moved = move();
+        move();
         rotateMatrix();
     }
     else if(a === 'd')
     {
         rotateMatrix(); 
         rotateMatrix();
-        moved = move();
+        move();
         rotateMatrix(); 
         rotateMatrix();
     }
     else if(a === 's')
     {
         rotateMatrix();
-        moved = move();
+        move();
         rotateMatrix(); 
         rotateMatrix(); 
         rotateMatrix();
     }
+    else
+    {
+        moved = false;
+    }
     return moved;
 }
 
+//this is the move "left" function
 function move()
 {
-    let moved = false;
+    //every single cell we have to save if it is not empty
+    //and then push it all to the end and add them together if they are next to each other and the same value
+    //and then finally we add all the zeroes after
     for(let r = 0; r < size; r++)
     {
         let row = [];
@@ -217,36 +231,30 @@ function move()
                 row.push(matrix[r][i])
             }
         }
-        let newRow = [];
+        let builder = [];
         for(let i = 0; i < row.length; i++)
         {
             if(row[i] === row[i + 1])
             {
-                newRow.push(row[i] * 2);
+                builder.push(row[i] * 2);
                 i++; 
-                moved = true;
             }
             else
             {
-                newRow.push(row[i]);
+                builder.push(row[i]);
             }
         }
         
-        while(newRow.length < size)
+        while(builder.length < size)
         {
-            newRow.push(0);
+            builder.push(0);
         }
         
         for(let c = 0; c < size; c++)
         {
-            if(matrix[r][c] !== newRow[c])
-            {
-                moved = true;
-            }
-            matrix[r][c] = newRow[c];
+            matrix[r][c] = builder[c];
         }
     }
-    return moved;
 }
 
 function rotateMatrix()
