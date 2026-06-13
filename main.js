@@ -136,7 +136,8 @@ async function play()
         //grab the move that the user makes
         //we do that move and then spawn however many times per difficulty
         const moveInput = await rl.question("do w, a, s, d: ");
-        if(processMove(moveInput))
+        if(processMo
+            ve(moveInput))
         {
             if(difficulty === "hard")
             {
